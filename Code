@@ -1,0 +1,142 @@
+#include <iostream>
+#include <fstream>
+#include<string>
+
+using namespace std;
+
+class contact
+{
+    private:
+    
+    string name;
+    string PhoneNo;
+    string address;
+    string discription;
+    string search;
+    
+    
+    fstream file;
+
+public:
+    void addContact();
+    void showAll();
+    void searchContact();
+    
+} obj;
+int main()
+{
+    char choice;
+
+    cout << "1 --->  Add Contact " << endl;
+    cout << "2 --->  Show Contact " << endl;
+    cout << "3 --->  Search Contact " << endl;
+    cout << "4 --->  Upgradation" <<endl;
+    cout << "0 --->  Exit" << endl;
+    cout << "Enter your choice :: ";
+    cin >> choice;
+    cin.ignore();
+    switch (choice)
+    {
+    case '1':
+        obj.addContact();
+        break;
+    case '2':
+        obj.showAll();
+        break;
+    case '3':
+        obj.searchContact();
+        break;
+    case '0':
+        return 0;
+        break;
+
+    default:
+        cout << "Invalid selection......!!!! ";
+        break;
+    }
+    return 0;
+}
+
+void contact::addContact()
+{
+    cout << "Enter the person name :: "<<endl;
+    cout.flush();
+    getline(cin,name);
+    cout << "Enter phone number :: "<<endl;
+    cout.flush();
+    cin.ignore();  // Clear the newline character left in the input buffer;
+    getline(cin,PhoneNo);
+    cout << "Enter address :: "<<endl;
+    cout.flush();
+    cin.ignore();  // Clear the newline character left in the input buffer;
+    getline(cin,address);
+    cout << "Enter description :: "<<endl;
+    cout.flush();
+    cin.ignore();  // Clear the newline character left in the input buffer;
+    getline(cin,discription);
+    
+
+    file.open("data.csv", ios ::out | ios ::app);
+    if (file.is_open()) {
+        file << name << "," << PhoneNo << "," << address << "," << discription << "\n";
+        file.close();
+    } else {
+        cout << "Unable to open file" << endl;
+    }
+}
+void contact ::showAll()
+{
+    file.open("data.csv", ios ::in);
+    getline(file, name, ',');
+    getline(file, PhoneNo, ',');
+    getline(file, address, ',');
+    getline(file, discription, '\n');
+    while (!file.eof())
+    {
+        cout << "Contact Name :: " << name << endl;
+        cout << "Phone Number :: " << PhoneNo << endl;
+        cout << "Contact Address :: " << address << endl;
+        cout << "Contact Description :: " << discription << endl
+             << endl
+             << endl;
+
+        getline(file, name, ',');
+        getline(file, PhoneNo, ',');
+        getline(file, address, ',');
+        getline(file, discription, '\n');
+    }
+    file.close();
+}
+
+void contact ::searchContact()
+{
+
+    cout << "Enter the phone number :: ";
+    getline(cin, search);
+
+    file.open("data.csv", ios ::in);
+    getline(file, name, ',');
+    getline(file, PhoneNo, ',');
+    getline(file, address, ',');
+    getline(file, discription, '\n');
+    while (!file.eof())
+    {
+        if (PhoneNo == search)
+        {
+            cout << "Phone Number :: " << name << endl;
+            cout << "Contact Name :: " << PhoneNo << endl;
+            cout << "Contact Address :: " << address << endl;
+            cout << "Contact Description :: " << discription << endl
+                 << endl
+                 << endl;
+        }
+
+        getline(file, name, ',');
+        getline(file, PhoneNo, ',');
+        getline(file, address, ',');
+        getline(file, discription, '\n');
+    }
+    
+    file.close();
+}
+
